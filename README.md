@@ -1,2 +1,3 @@
 # GoalTracker
-A goal tracking application with a badlands style
+A goal tracking application
+
