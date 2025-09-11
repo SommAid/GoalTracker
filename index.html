@@ -1,68 +1,13 @@
-<!DOCTYPE HTML>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Climb</title>
-    
-    <!-- The following line references an external css file -->
-    <!-- It defines style rules for your page, and elements in your page -->
-    <link href="css/style.css" rel="stylesheet">
-</head>
-<body>
-    <div id="user-box">
-        <div>Aidan Sommer</div>
-        <div>2003.02.28</div>
-    </div>
-    <div id="user-notes">
-        <input type="file" id="myFile" name="filename">
-    </div>
-    <div id="insp-quote">
-        <p>"A fruit is a vegetable with looks and money. Plus, if you let fruit rot, it turns into wine, something brussel sprouts never do."
-        
-        - P. J. O'Rourke
-        </p>
-    </div> 
-    <div id="user-notes">
-        <label class="text-entry" for="text-entry">
-            Write about how you felt today...
-        </label`>
-        <input type="text" class="text-entry" name="Today's Notes"><br><br>
-    </div>
-    <div id="sleep-entry">
-        <label for="quantity">Enter how many hours you slept: </label>
-        <input type="number" id="sleep-quantity" name="quantity" min="0" max="24">
-    </div>
-    <div id="mood-tracker">
-        <div>
-            <label>How are you feeling today?</label>
-        </div>
-        <div id="mood-options">
-            <input type="checkbox" id="Positive">
-            <img src="./images/FeedbackSmile.svg">
-            <input type="checkbox" id="Neutral">
-            <img src="./images/Actor.svg">
-            <input type="checkbox" id="Negative">
-            <img src="./images/FeedbackFrown.svg">
-        </div>
-    </div>
-
-    <div>
-        <div>
-            Your average amount of sleep:
-        </div>
-        <div id="average-amt-sleep"></div>
-    <div>
-        <div>
-            Your average mood has been:
-        </div>
-        <div id="average-mood-score">
-        </div>
-    <div id="img-box">
-        <img src="./images/Rocket.svg">
-        <img src="./images/RadarChart.svg">
-        <img src="./images/Cancel.svg">
-        <img src="./images/Checkmark.svg">
-    </div>
-    <script src="js/main.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="images/Rocket.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + Svelte</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
 </html>
