@@ -1,0 +1,70 @@
+#user-box {
+    color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1em;
+    background: rgb(191, 121, 110);
+}
+#insp-quote{
+    margin: 2em;
+    padding: 1em;
+    color: whitesmoke;
+    border-radius: 1em;
+    background-color: rgb(191,121,110);
+}
+#img-box {
+    width: 4em;
+    height: 4em;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    justify-content: center;
+}
+#sleep-entry{
+    margin: 2em;
+    padding: 1em;
+    color: whitesmoke;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background: rgb(109, 142, 193);
+}
+#user-notes{
+    margin: 2em;
+    padding: 1em;
+    color: whitesmoke;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: column;
+    background: rgb(109, 142, 193);
+}
+#mood-tracker{
+    color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1em;
+    padding: 1em;
+    background: rgb(191, 121, 110);
+}
+#mood-options{
+    color: whitesmoke;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.text-entry{
+    margin: 2em;
+    padding: 1em;
+    color: whitesmoke;
+    border-radius: 1em;
+    background-color: rgb(109, 142, 193);
+}
