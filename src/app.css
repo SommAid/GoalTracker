@@ -36,9 +36,13 @@ h1 {
 }
 
 .card {
-  border-radius: 1em;
   background-color: rgb(191, 121, 110);;
   padding: 2em;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-content space-between;
+  gap: 1em;
 }
 
 #app {

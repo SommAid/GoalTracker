@@ -1,9 +1,9 @@
 <script>
-  import User from '../lib/Login.svelte'
+  import Login from '../lib/Login.svelte'
 </script>
 
 <main>
   <div class="card">
-    <User />
+    <Login />
   </div>
 </main>

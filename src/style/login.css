@@ -1,0 +1,23 @@
+.form_input {
+    font-family: 'Roboto', sans-serif;
+    color: hex(#d9cdb9);
+    font-size: 1.2rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+}
+.from_intro{
+    color:#d9cdb9;
+    text-align: left;
+    border: none;
+    border-radius: 0.5rem;
+}
+.form_begin{
+    background-color:#95a0ac;
+    text-align: center;
+    border: none;
+    border-radius: 0.5rem;
+}
+
+  
