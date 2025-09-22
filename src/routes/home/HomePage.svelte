@@ -303,7 +303,7 @@
     </div>
 
     <div class="add-tracker-container">
-        <button id="add-tracker-btn" on:click={() => isModalOpen = true}>+ Add Tracker</button>
+        <button id="add-tracker-btn" on:click={() => isModalOpen = true}>+</button>
     </div>
     {#if currentView === 'week'}
         <div class="summary-wrapper">
