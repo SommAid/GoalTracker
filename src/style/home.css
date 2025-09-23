@@ -121,7 +121,8 @@ body {
 .stat-item span { display: block; font-size: 1.5rem; font-weight: 600; color: #1f2937; }
 .stat-item label { font-size: 0.8rem; color: #6c757d; text-transform: uppercase; }
 .edit-btn {
-    margin-top: 20px;
+    margin-bottom: 16px;
+    margin-left: 2rem;
     padding: 10px 25px;
     font-size: 1rem;
     font-weight: 600;

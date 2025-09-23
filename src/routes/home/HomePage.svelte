@@ -3,12 +3,12 @@
 
     .add-tracker-container {
         display: flex;
-        justify-content: flex-end; /* Aligns the button to the right */
+        justify-content: space-between; /* Aligns the button to the right */
         margin-bottom: 15px; /* Adds space below the button */
     }
     #add-tracker-btn {
         padding: 8px 15px;
-        font-size: 0.9rem;
+        font-size: 1.2rem;
         font-weight: 600;
         color: #ffffff;
         background-color: #3b82f6;
@@ -46,9 +46,15 @@
         stroke: #4b5563;
     }
     .date-display {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
         font-weight: 600;
         color: #1f2937;
+    }
+    .tracker-header{
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin: 0;
     }
     .view-switcher {
         display: flex;
@@ -85,6 +91,7 @@
     .summary-item {
         text-align: center;
         flex-shrink: 0; 
+        position: relative; /* Make this a positioning context for the delete button */
     }
     .summary-item h3 { margin: 0 0 15px 0; font-weight: 600; color: #374151; }
     .progress-ring { width: 150px; height: 150px; }
@@ -95,6 +102,37 @@
     }
     .progress-ring__text { font-size: 1.7rem; font-weight: 700; fill: #1f2f37; }
     .progress-ring__label { font-size: 0.8rem; fill: #6c757d; text-transform: uppercase; }
+
+    /* --- New Styles for Delete Button --- */
+    .delete-tracker-btn {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: 1rem;
+        height: 1rem;
+        padding: 12px;
+        background-color: #ef4444; /* Red */
+        color: white;
+        border-radius: 4rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        line-height: 1;
+        opacity: 0; /* Hidden by default */
+        transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+        z-index: 10;
+    }
+    .summary-item:hover .delete-tracker-btn {
+        opacity: 1; /* Show on hover */
+        transform: scale(1);
+    }
+    .delete-tracker-btn:hover {
+        background-color: #dc2626; /* Darker Red on hover */
+    }
+    /* --- End New Styles --- */
 
     .scroll-arrow {
         position: absolute;
@@ -111,6 +149,21 @@
     .scroll-arrow.left { left: -20px; }
     .scroll-arrow.right { right: -20px; }
     .scroll-arrow svg { stroke: #374151; }
+
+    .day-info-header{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .goal-input-form{
+        background-color: whitesmoke;
+        color: #1f2937;
+    }
+    .goal-input-form::placeholder{
+        color: grey;
+    }
 </style>
 
 <script>
@@ -125,13 +178,20 @@
             { id: 'fat', name: 'Fat', goal: 398, timeframe: 'weekly' }
         ],
         dayData: {
+            "2025-09-14": { values: { calories: 2100, protein: 150, carbs: 250, fat: 58 } },
+            "2025-09-15": { values: { calories: 1950, protein: 160, carbs: 210, fat: 51 } },
+            "2025-09-16": { values: { calories: 2050, protein: 155, carbs: 230, fat: 55 } },
+            "2025-09-17": { values: { calories: 2000, protein: 150, carbs: 225, fat: 55 } },
+            "2025-09-18": { values: { calories: 2150, protein: 150, carbs: 240, fat: 49 } },
+            "2025-09-19": { values: { calories: 2300, protein: 170, carbs: 250, fat: 64 } },
+            "2025-09-20": { values: { calories: 2400, protein: 180, carbs: 270, fat: 66 } },
             "2025-09-21": { values: { calories: 2100, protein: 150, carbs: 250, fat: 58 } },
             "2025-09-22": { values: { calories: 1950, protein: 160, carbs: 210, fat: 51 } },
             "2025-09-23": { values: { calories: 2050, protein: 155, carbs: 230, fat: 55 } },
             "2025-09-24": { values: { calories: 2000, protein: 150, carbs: 225, fat: 55 } },
             "2025-09-25": { values: { calories: 2150, protein: 165, carbs: 240, fat: 59 } },
             "2025-09-26": { values: { calories: 2300, protein: 170, carbs: 260, fat: 64 } },
-            "2025-09-27": { values: { calories: 2400, protein: 180, carbs: 270, fat: 66 } }
+            "2025-09-27": { values: { calories: 2400, protein: 180, carbs: 270, fat: 66 } },
         },
         activeDayDate: null
     };
@@ -142,6 +202,7 @@
     let isEditing = false;
     let newTrackerName = '';
     let newTrackerGoal = null;
+    let newTrackerTime = '';
 
     let showLeftArrow = false;
     let showRightArrow = false;
@@ -224,6 +285,8 @@
         if (currentView === 'week') newDate.setDate(newDate.getDate() + (direction * 7));
         currentDate = newDate;
     }
+
+    let jumpToToday = () => currentDate = today;
     
     function handleDayClick(dateKey) {
         appData.activeDayDate = dateKey;
@@ -236,8 +299,12 @@
     }
 
     function handleAddNewTracker() {
-        if (newTrackerName && newTrackerGoal) {
+        if (newTrackerName && newTrackerGoal && newTrackerTime) {
             const id = newTrackerName.toLowerCase().replace(/ /g, '-');
+            console.log(newTrackerTime);
+            if (newTrackerTime == "daily"){
+                newTrackerGoal *= 7;
+            }
             appData.trackers = [...appData.trackers, { id, name: newTrackerName, goal: newTrackerGoal, timeframe: 'weekly' }];
             Object.keys(appData.dayData).forEach(dateKey => {
                 appData.dayData[dateKey].values[id] = 0;
@@ -245,8 +312,27 @@
             isModalOpen = false;
             newTrackerName = '';
             newTrackerGoal = null;
+            newTrackerTime = '';
         }
     }
+
+    /** --- New Delete Function --- */
+    function deleteTracker(idToDelete) {
+        // Filter out the tracker from the main array
+        appData.trackers = appData.trackers.filter(t => t.id !== idToDelete);
+
+        // Remove the deleted tracker's data from all day entries
+        Object.keys(appData.dayData).forEach(dateKey => {
+            if (appData.dayData[dateKey].values[idToDelete] !== undefined) {
+                delete appData.dayData[dateKey].values[idToDelete];
+            }
+        });
+
+        // Trigger reactivity by reassigning the top-level object
+        appData = appData;
+    }
+    /** --- End New Function --- */
+
 
     function updateArrowVisibility() {
         if (!isScrollable || !summaryContainer) {
@@ -290,20 +376,13 @@
             </button>
         </div>
         <div class="view-switcher">
-            <button on:click={() => currentView = 'week'} class:active={currentView === 'week'} title="Week View">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
-            </button>
-            <button on:click={() => currentView = 'month'} class:active={currentView === 'month'} title="Month View">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18M-7.5 12h13.5" /></svg>
-            </button>
-            <button on:click={() => currentView = 'year'} class:active={currentView === 'year'} title="Year View">
-                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
-            </button>
+            <button id="add-tracker-btn" title="Jump to today" on:click={() => jumpToToday()}>Jump</button>
         </div>
     </div>
 
     <div class="add-tracker-container">
-        <button id="add-tracker-btn" on:click={() => isModalOpen = true}>+</button>
+        <p class="tracker-header">Weekly Stats</p> 
+        <button id="add-tracker-btn" title="Add new progress tracker" on:click={() => isModalOpen = true}>Add Tracker</button>
     </div>
     {#if currentView === 'week'}
         <div class="summary-wrapper">
@@ -321,6 +400,13 @@
             >
                 {#each summaryData as ring (ring.id)}
                     <div class="summary-item">
+                        <button 
+                            class="delete-tracker-btn" 
+                            title="Delete {ring.name}" 
+                            on:click={() => deleteTracker(ring.id)}
+                        >
+                            &times;
+                        </button>
                         <h3>{ring.name}</h3>
                         <svg class="progress-ring" viewBox="0 0 140 140">
                             <circle class="progress-ring__track" stroke="#e5e7eb" stroke-width="10" fill="transparent" r="60" cx="70" cy="70"/>
@@ -369,7 +455,14 @@
                         </div>
                     </form>
                 {:else}
+                <div class="day-info-header">
                     <h2>{activeDay.name}</h2>
+                    {#if activeDay.date <= today}
+                        <button class="edit-btn" class:past-day-edit={activeDay.date < today} class:current-day-edit={activeDay.dateKey === formatDate(today)} on:click={() => isEditing = true}>
+                            Edit
+                        </button>
+                    {/if}
+                </div>
                     <div class="day-stats">
                         {#each appData.trackers as tracker (tracker.id)}
                         <div class="stat-item">
@@ -378,20 +471,9 @@
                         </div>
                         {/each}
                     </div>
-                    
-                    {#if activeDay.date <= today}
-                        <button class="edit-btn" class:past-day-edit={activeDay.date < today} class:current-day-edit={activeDay.dateKey === formatDate(today)} on:click={() => isEditing = true}>
-                            Edit
-                        </button>
-                    {/if}
                 {/if}
             {/if}
         </div>
-
-    {:else if currentView === 'month'}
-        <div class="day-display"><h2>Monthly View Coming Soon!</h2></div>
-    {:else if currentView === 'year'}
-        <div class="day-display"><h2>Yearly View Coming Soon!</h2></div>
     {/if}
 </div>
 
@@ -400,9 +482,13 @@
         <div class="modal-content">
             <h2>Add New Tracker</h2>
             <form class="modal-form" on:submit|preventDefault={handleAddNewTracker}>
-                <input type="text" placeholder="Tracker Name (e.g., Fiber)" required bind:value={newTrackerName}>
-                <input type="number" placeholder="Weekly Goal (e.g., 200)" required bind:value={newTrackerGoal}>
-                <select disabled><option value="weekly">Weekly</option></select>
+                <input class="goal-input-form" type="text" placeholder="Tracker Name (e.g., Fiber)" required bind:value={newTrackerName}>
+                <input class="goal-input-form" type="number" placeholder="Weekly Goal (e.g., 200)" required bind:value={newTrackerGoal}>
+                <select class="goal-input-form" placeholder="Time frame" required bind:value={newTrackerTime}>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="daily">Daily</option>
+                </select>
                 <div class="modal-actions">
                     <button type="button" class="edit-btn cancel-btn" on:click={() => isModalOpen = false}>Cancel</button>
                     <button type="submit" class="edit-btn save-btn">Add</button>
