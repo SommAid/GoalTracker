@@ -59,7 +59,13 @@ body {
 .progress-ring__label { font-size: 0.8rem; fill: #6c757d; text-transform: uppercase; }
 
 /* Timeline styles */
-.timeline-container { width: 100%; }
+.timeline-container { 
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    text-align: left;
+    width: 100%;
+}
 .timeline {
     display: flex;
     justify-content: space-between;

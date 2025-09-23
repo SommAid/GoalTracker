@@ -56,6 +56,13 @@
         color: #1f2937;
         margin: 0;
     }
+    .timeline-header{
+        margin-top: 25px;
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1f2937;
+    }
     .view-switcher {
         display: flex;
         gap: 5px;
@@ -72,7 +79,7 @@
         flex-wrap: wrap; 
         justify-content: center;
         gap: 20px;
-        margin-bottom: 40px;
+        margin-bottom: 0px;
         padding-bottom: 20px;
         border-bottom: 2px solid #e5e7eb;
     }
@@ -172,10 +179,10 @@
     // --- Central Reactive State ---
     let appData = {
         trackers: [
-            { id: 'calories', name: 'Calories', goal: 14950, timeframe: 'weekly' },
-            { id: 'protein', name: 'Protein', goal: 1115, timeframe: 'weekly' },
-            { id: 'carbs', name: 'Carbs', goal: 1675, timeframe: 'weekly' },
-            { id: 'fat', name: 'Fat', goal: 398, timeframe: 'weekly' }
+            { id: 'calories', name: 'Calories', goal: 14950, timeframe: 'weekly', unit: ''},
+            { id: 'protein', name: 'Protein', goal: 1115, timeframe: 'weekly', unit: 'g'},
+            { id: 'carbs', name: 'Carbs', goal: 1675, timeframe: 'weekly', unit: 'g'},
+            { id: 'fat', name: 'Fat', goal: 398, timeframe: 'weekly', unit: 'g'}
         ],
         dayData: {
             "2025-09-14": { values: { calories: 2100, protein: 150, carbs: 250, fat: 58 } },
@@ -203,6 +210,7 @@
     let newTrackerName = '';
     let newTrackerGoal = null;
     let newTrackerTime = '';
+    let newTrackerUnit = '';
 
     let showLeftArrow = false;
     let showRightArrow = false;
@@ -305,7 +313,7 @@
             if (newTrackerTime == "daily"){
                 newTrackerGoal *= 7;
             }
-            appData.trackers = [...appData.trackers, { id, name: newTrackerName, goal: newTrackerGoal, timeframe: 'weekly' }];
+            appData.trackers = [...appData.trackers, { id, name: newTrackerName, goal: newTrackerGoal, timeframe: 'weekly', unit: newTrackerUnit}];
             Object.keys(appData.dayData).forEach(dateKey => {
                 appData.dayData[dateKey].values[id] = 0;
             });
@@ -313,6 +321,7 @@
             newTrackerName = '';
             newTrackerGoal = null;
             newTrackerTime = '';
+            newTrackerUnit = '';
         }
     }
 
@@ -376,7 +385,7 @@
             </button>
         </div>
         <div class="view-switcher">
-            <button id="add-tracker-btn" title="Jump to today" on:click={() => jumpToToday()}>Jump</button>
+            <button id="add-tracker-btn" title="Jump to today" on:click={() => jumpToToday()}>Jump to Today</button>
         </div>
     </div>
 
@@ -428,6 +437,7 @@
         </div>
 
         <div class="timeline-container">
+            <h1 class="timeline-header">Select Day:</h1>
             <ul class="timeline">
                 {#each displayedWeek as day}
                     <li class="day">
@@ -466,7 +476,11 @@
                     <div class="day-stats">
                         {#each appData.trackers as tracker (tracker.id)}
                         <div class="stat-item">
-                            <span>{ (activeDay.values[tracker.id] || 0).toLocaleString() }{tracker.id !== 'calories' ? 'g' : ''}</span>
+                            {#if tracker.unit}
+                                <span>{ (activeDay.values[tracker.id] || 0).toLocaleString() }{tracker.unit}</span>
+                            {:else}
+                                <span>{ (activeDay.values[tracker.id] || 0).toLocaleString() }{tracker.id !== 'calories' ? 'g' : ''}</span>
+                            {/if}
                             <label>{tracker.name}</label>
                         </div>
                         {/each}
@@ -483,9 +497,10 @@
             <h2>Add New Tracker</h2>
             <form class="modal-form" on:submit|preventDefault={handleAddNewTracker}>
                 <input class="goal-input-form" type="text" placeholder="Tracker Name (e.g., Fiber)" required bind:value={newTrackerName}>
-                <input class="goal-input-form" type="number" placeholder="Weekly Goal (e.g., 200)" required bind:value={newTrackerGoal}>
+                <input class="goal-input-form" type="number" placeholder="Enter Quantity (e.g., 200)" required bind:value={newTrackerGoal}>
+                <input class="goal-input-form" type="text" placeholder="Enter Units (e.g., g)" required bind:value={newTrackerUnit}>
                 <select class="goal-input-form" placeholder="Time frame" required bind:value={newTrackerTime}>
-                    <option value="" disabled selected>Select an option</option>
+                    <option value="" disabled selected>Select a time frame</option>
                     <option value="weekly">Weekly</option>
                     <option value="daily">Daily</option>
                 </select>
