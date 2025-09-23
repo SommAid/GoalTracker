@@ -437,7 +437,7 @@
         </div>
 
         <div class="timeline-container">
-            <h1 class="timeline-header">Select Day:</h1>
+            <h1 class="timeline-header">Select Day To Edit</h1>
             <ul class="timeline">
                 {#each displayedWeek as day}
                     <li class="day">
